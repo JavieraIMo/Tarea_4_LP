@@ -36,6 +36,10 @@ El proyecto está organizado de la siguiente manera:
 - **Funciones de orden superior**: Aplicadas como argumentos para abstraer operaciones.
 - **Recursión de cola**: Implementada en P2 y P3.
 
+##  ✏️ Consideraciones 
+- En P1 no se utiliza length, list-ref, member, for-each ni ninguna construcción imperativa.
+- 
+
 ## 🚀 Ejecución
 
 ### Usando DrRacket
