@@ -1,0 +1,29 @@
+Ejemplos P1:
+
+(coincide? 3 '(a b c))
+(coincide? 2 '(a b c))
+(coincide? 0 '())
+(coincide? 3 '("texto" 42 #t))
+
+Ejemplos P2:
+
+(mezclador-gourmet-simple + 0 '(1 2 3 4))
+(mezclador-gourmet-simple * 1 '(2 3 4))
+(mezclador-gourmet-simple (lambda (ing pila) (cons ing pila)) '() '(pan lechuga tomate queso))
+
+(mezclador-gourmet-cola + 0 '(1 2 3 4))
+(mezclador-gourmet-cola * 1 '(2 3 4))
+(mezclador-gourmet-cola (lambda (pila ing) (cons ing pila)) '() '(pan lechuga tomate queso))
+
+Ejemplos P3:
+
+(secuencia-rotacional (list (lambda (ac x) (+ ac x))) 0 '(1 2 3 4))
+(secuencia-rotacional (list (lambda (ac x) (* ac x))) 1 '(2 3 4))
+(secuencia-rotacional (list (lambda (ac x) (string-append ac x "-"))) "" '("pan" "queso" "tomate"))
+
+Ejemplos P4:
+
+(busqueda-almacen bodega 'pan)
+(busqueda-almacen bodega 'queso)
+(busqueda-almacen bodega 'fruta)
+(busqueda-almacen bodega 'cerveza)

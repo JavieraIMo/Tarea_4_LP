@@ -1,51 +1,45 @@
-# Tarea 4: Programación Funcional en Scheme
+# Tarea 4: Scheme
 
 ## Autor
 Javiera Constanza Ibaca Morales  
 Rol: 202273624-0
 
 ## Descripción
-Esta tarea consiste en la implementación de varias funciones en el lenguaje de programación funcional Scheme.
+Esta tarea consiste en la implementación de varias funciones en el lenguaje de programación funcional Scheme (Racket), explorando diferentes técnicas de programación funcional como recursión, procesamiento de listas y funciones de orden superior.
 
 ## 🛠️ Requisitos del Sistema
 
 ### Dependencias
-- Un intérprete de Scheme (recomendado):
-  - DrRacket (versión 8.0+)
-  - MIT Scheme
-  - Guile Scheme
-- Conocimientos básicos de programación funcional y Scheme
+- DrRacket (versión 8.0+)
 
 ## 📁 Estructura del Código
-> 📄 **main.scm**: Archivo principal que contiene todas las funciones implementadas
-> 📄 **tests.scm**: Conjunto de pruebas para verificar el funcionamiento correcto de las funciones
-> 📄 **README.md**: Este archivo 
-> 📄 **examples.scm**: Ejemplos de uso de las funciones implementadas
+
+El proyecto está organizado en varios archivos, cada uno enfocado en un problema específico:
+
+> 📄 **P1.rkt**: Función `coincide?` que verifica si un número dado coincide con la cantidad de elementos en una lista.
+> 
+> 📄 **P2.rkt**: Implementación de dos funciones de procesamiento de listas:
+> - `mezclador-gourmet-simple`: Procesa elementos de adentro hacia afuera
+> - `mezclador-gourmet-cola`: Procesa elementos de izquierda a derecha
+> 
+> 📄 **P3.rkt**: Función `secuencia-rotacional` que aplica una secuencia de funciones a una lista de ingredientes, acumulando resultados.
+> 
+> 📄 **P4.rkt**: Función `busqueda-almacen` que busca todas las rutas hacia un producto en un árbol que representa un almacén.
+> 
+> 📄 **README.md**: Este archivo con documentación general del proyecto.
 
 ## 🧩 Estructuras de Datos y Patrones de Diseño
-- **Listas**: Estructura de datos fundamental en Scheme, utilizada extensivamente en la implementación de las funciones.
-- **Recursión**: Patrón de diseño principal para el procesamiento de estructuras de datos en programación funcional.
-- **Funciones de orden superior**: Utilizadas para abstraer patrones comunes de recursión y manipulación de datos.
-- **Funciones puras**: Implementación sin efectos secundarios siguiendo el paradigma funcional.
+- **Listas simples y anidadas**: Estructuras fundamentales utilizadas en todos los problemas.
+- **Recursión simple**: Utilizada para recorrer y procesar listas lineales.
+- **Recursión en estructuras de árbol**: Implementada para navegar árboles N-arios en P4.
+- **Funciones de orden superior**: Aplicadas como argumentos para abstraer operaciones.
+- **Recursión de cola**: Implementada en P2 y P3 para optimizar el proceso recursivo.
+- **Acumuladores**: Utilizados para mantener resultados parciales durante la recursión.
 
-## 🚀 Compilación y Ejecución
+## 🚀 Ejecución
 
-### Usando DrRacket (Recomendado)
+### Usando DrRacket
 1. Abra DrRacket
-2. Cargue el archivo `main.scm`
-3. Seleccione el lenguaje "Pretty Big" o "R5RS" en la parte inferior de la ventana
-4. Presione el botón "Run" para evaluar todas las definiciones
-5. Utilice la ventana de interacción para probar las funciones implementadas
-
-### Ejecución en línea de comandos
-Para MIT Scheme:
-```bash
-mit-scheme --load main.scm
-```
-Para Guile Scheme:
-```bash
-guile -c "(load \"main.scm\")"
-```
-
-## 📝 Notas
-- La documentación de cada función se encuentra en forma de comentarios dentro del código fuente.
+2. Cargue cualquiera de los archivos `.rkt`
+3. Presione el botón "Run" para evaluar todas las definiciones
+4. Utilice la ventana de interacción para probar las funciones implementadas
