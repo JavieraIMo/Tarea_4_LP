@@ -5,7 +5,7 @@ Javiera Constanza Ibaca Morales
 Rol: 202273624-0
 
 ## Descripción
-Esta tarea consiste en la implementación de varias funciones en el lenguaje de programación funcional Scheme (Racket), explorando diferentes técnicas de programación funcional como recursión, procesamiento de listas y funciones de orden superior.
+Esta tarea consiste en la implementación de varias funciones en el lenguaje Scheme (Racket), con diferentes técnicas de programación funcional como recursión, procesamiento de listas y funciones de orden superior.
 
 ## 🛠️ Requisitos del Sistema
 
@@ -14,19 +14,19 @@ Esta tarea consiste en la implementación de varias funciones en el lenguaje de 
 
 ## 📁 Estructura del Código
 
-El proyecto está organizado en varios archivos, cada uno enfocado en un problema específico:
-
-> 📄 **P1.rkt**: Función `coincide?` que verifica si un número dado coincide con la cantidad de elementos en una lista.
-> 
-> 📄 **P2.rkt**: Implementación de dos funciones de procesamiento de listas:
-> - `mezclador-gourmet-simple`: Procesa elementos de adentro hacia afuera
-> - `mezclador-gourmet-cola`: Procesa elementos de izquierda a derecha
-> 
-> 📄 **P3.rkt**: Función `secuencia-rotacional` que aplica una secuencia de funciones a una lista de ingredientes, acumulando resultados.
-> 
-> 📄 **P4.rkt**: Función `busqueda-almacen` que busca todas las rutas hacia un producto en un árbol que representa un almacén.
-> 
-> 📄 **README.md**: Este archivo con documentación general del proyecto.
+El proyecto está organizado de la siguiente manera:
+> 📁 Tarea4LP_202273624-0
+  > 📄 **P1.rkt**: Función `coincide?` que verifica si un número dado coincide con la cantidad de elementos en una lista.
+  > 
+  > 📄 **P2.rkt**: Implementación de dos funciones de procesamiento de listas:
+  > - `mezclador-gourmet-simple`: Procesa elementos de adentro hacia afuera
+  > - `mezclador-gourmet-cola`: Procesa elementos de izquierda a derecha
+  > 
+  > 📄 **P3.rkt**: Función `secuencia-rotacional` que aplica una secuencia de funciones a una lista de ingredientes, acumulando resultados.
+  > 
+  > 📄 **P4.rkt**: Función `busqueda-almacen` que busca todas las rutas hacia un producto en un árbol que representa un almacén.
+  > 
+  > 📄 **README.md**: Este archivo con documentación general del proyecto.
 
 ## 🧩 Estructuras de Datos y Patrones de Diseño
 - **Listas simples y anidadas**: Estructuras fundamentales utilizadas en todos los problemas.
