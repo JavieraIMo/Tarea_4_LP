@@ -7,8 +7,29 @@
 (define (busqueda-almacen arbol producto)
   ;; Saltamos el nombre del almacén (primer elemento) y comenzamos la búsqueda
   (let ((rutas (buscar-rutas (cdr arbol) producto)))
-    ;; Ordenamos las rutas de menor a mayor longitud
-    (sort rutas (lambda (ruta1 ruta2) (< (length ruta1) (length ruta2))))))
+    ;; Ordenamos las rutas primero por longitud y luego lexicográficamente
+    (sort rutas (lambda (ruta1 ruta2)
+                  (let ((len1 (length ruta1))
+                        (len2 (length ruta2)))
+                    (if (= len1 len2)
+                        ;; Si tienen la misma longitud, comparamos elemento por elemento
+                        (lex-compare ruta1 ruta2)
+                        ;; Si tienen longitudes diferentes, ordenamos por longitud
+                        (< len1 len2)))))))
+
+;; Comparación lexicográfica de listas de números
+;; Devuelve #t si lista1 es lexicográficamente menor que lista2
+(define (lex-compare lista1 lista2)
+  (cond
+    ;; Si la primera lista está vacía, es menor
+    ((null? lista1) #t)
+    ;; Si la segunda lista está vacía, la primera no es menor
+    ((null? lista2) #f)
+    ;; Comparamos los primeros elementos
+    ((< (car lista1) (car lista2)) #t)
+    ((> (car lista1) (car lista2)) #f)
+    ;; Si son iguales, seguimos con el resto
+    (else (lex-compare (cdr lista1) (cdr lista2)))))
 
 ;; Función auxiliar para buscar todas las rutas hacia un producto
 ;;

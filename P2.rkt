@@ -38,7 +38,6 @@
           (let* ((contador (f e-esperado elemento-actual))
                  (nuevo-restante (cdr lista-restante)))
             
-            ;; Llamamos recursivamente con los nuevos valores
             (procesar-lista-cola f contador nuevo-restante))))))
 
 ;; Aplica una función a cada elemento de la lista, procesando de izquierda a derecha
