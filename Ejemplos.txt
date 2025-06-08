@@ -1,29 +1,177 @@
-Ejemplos P1:
+------------------------------------------------  Ejemplos P1  ------------------------------------------------
 
-(coincide? 3 '(a b c))
-(coincide? 2 '(a b c))
-(coincide? 0 '())
-(coincide? 3 '("texto" 42 #t))
+(coincide? 3 '(pan ketchup lechuga))       
+R: #t
 
-Ejemplos P2:
+(coincide? 2 '(hamburguesa queso tomate))  
+R: #f
 
-(mezclador-gourmet-simple + 0 '(1 2 3 4))
-(mezclador-gourmet-simple * 1 '(2 3 4))
-(mezclador-gourmet-simple (lambda (ing pila) (cons ing pila)) '() '(pan lechuga tomate queso))
+(coincide? 3 '(a b c))                     
+R: #t
 
-(mezclador-gourmet-cola + 0 '(1 2 3 4))
-(mezclador-gourmet-cola * 1 '(2 3 4))
-(mezclador-gourmet-cola (lambda (pila ing) (cons ing pila)) '() '(pan lechuga tomate queso))
+(coincide? 2 '(a b c))                     
+R: #f
 
-Ejemplos P3:
+(coincide? 0 '())                          
+R: #t
 
-(secuencia-rotacional (list (lambda (ac x) (+ ac x))) 0 '(1 2 3 4))
-(secuencia-rotacional (list (lambda (ac x) (* ac x))) 1 '(2 3 4))
-(secuencia-rotacional (list (lambda (ac x) (string-append ac x "-"))) "" '("pan" "queso" "tomate"))
+(coincide? 3 '("texto" 42 #t))             
+R: #t
 
-Ejemplos P4:
+(coincide? 5 '(a b c d e))       
+R: #t
 
+(coincide? 1 '(42))              
+R: #t
+
+(coincide? 4 '(a b c))           
+R: #f
+
+(coincide? 0 '(1))               
+R: #f
+
+(coincide? 10 '(1 2 3 4 5 6 7 8 9 10))
+R: #t
+
+(coincide? 3 '(#f #f #f))        
+R: #t
+
+(coincide? 2 '(() ()))           
+R: #t
+
+
+------------------------------------------------  Ejemplos P2  ------------------------------------------------
+
+(mezclador-gourmet-simple + 0 '(1 2 3 4))                                                      
+R: 24
+
+(mezclador-gourmet-simple * 1 '(2 3 4))                                                        
+R: 24
+
+(mezclador-gourmet-simple + 0 '(8000 12000 15000))                                             
+R: 35000
+
+(mezclador-gourmet-simple (lambda (ing pila) (cons ing pila)) '() '(pan lechuga tomate queso)) 
+R: '(pan lechuga tomate queso)
+
+(mezclador-gourmet-simple string-append "" '("a" "b" "c"))
+R: "cba"
+
+(mezclador-gourmet-simple (lambda (ac x) (/ ac x)) 24 '(2 3))
+R: 4
+
+(mezclador-gourmet-cola + 0 '(1 2 3 4))                                                        
+R: 24
+
+(mezclador-gourmet-cola * 1 '(2 3 4))                                                          
+R: 24
+
+(mezclador-gourmet-cola + 0 '(8000 12000 15000))                                               
+R: 35000
+
+(mezclador-gourmet-cola (lambda (pila ing) (cons ing pila)) '() '(pan lechuga tomate queso))   
+R: '(queso tomate lechuga pan)
+
+(mezclador-gourmet-cola string-append "" '("a" "b" "c"))
+R: "abc"
+
+(mezclador-gourmet-cola (lambda (ac x) (/ ac x)) 24 '(2 3))
+R: 4
+
+------------------------------------------------  Ejemplos P3  ------------------------------------------------
+
+(secuencia-rotacional (list (lambda (ac x) (+ ac x))) 0 '(1 2 3 4))                                 
+R: '(1 3 6 10)
+
+(secuencia-rotacional (list (lambda (ac x) (* ac x))) 1 '(2 3 4))                                   
+R: '(2 6 24)
+
+(secuencia-rotacional (list (lambda (ac x) (string-append ac x "-"))) "" '("pan" "queso" "tomate")) 
+R: '("pan-" "pan-queso-" "pan-queso-tomate-")
+
+(secuencia-rotacional (list (lambda (ac x) (- ac x))) 10 '(1 2 3))
+R: '(9 7 4)
+
+(secuencia-rotacional (list (lambda (ac x) (expt ac x))) 2 '(3 2))
+R: '(8 64)
+
+(secuencia-rotacional (list (lambda (ac x) (cons x ac))) '() '(1 2 3))
+R: '((1) (2 1) (3 2 1))
+
+(secuencia-rotacional (list (lambda (ac x) (append ac (list x)))) '() '(1 2 3))
+R: '((1) (1 2) (1 2 3))
+
+(secuencia-rotacional (list (lambda (ac x) (/ ac x))) 24 '(2 3 4))
+R: '(12 4 1)
+
+(secuencia-rotacional (list (lambda (ac x) (max ac x))) 5 '(3 8 2 10))
+R: '(5 8 8 10)
+
+(secuencia-rotacional (list (lambda (ac x) (min ac x))) 5 '(3 8 2 10))
+R: '(3 3 2 2)
+
+------------------------------------------------  Ejemplos P4  ------------------------------------------------
+
+(define bodega
+  '(bodega
+    (pasillo1 leche pan)
+    (pasillo2 
+      (estanteA pan queso) 
+      (estanteB manzana pan)
+      (estanteC (cajon1 chocolate) (cajon2 galletas)))
+    (pasillo3 fruta)))
+
+(define bodega
+  '(bodega
+    (pasillo1 leche pan)
+    (pasillo2 (estanteA pan queso) (estanteB manzana pan))
+    (pasillo3 fruta)
+    (pasillo4 aceite vinagre)))
+
+(define bodega
+  '(bodega
+    (pasillo1 leche pan)
+    (pasillo2 (estanteA pan queso) (estanteB manzana pan))
+    (pasillo3 fruta)))
+
+;; 1. Buscar "pan"
+(busqueda-almacen bodega 'pan)      
+R: '((1 2)    ; pasillo1 → segundo elemento "pan"
+    (2 1 1)   ; pasillo2 → estanteA → primer elemento "pan"
+    (2 2 2))  ; pasillo2 → estanteB → segundo elemento "pan"
+
+;; 2. Buscar "queso"
+(busqueda-almacen bodega 'queso)    
+R: '((2 1 2)) ; pasillo2 → estanteA → segundo elemento "queso"
+
+;; 3. Buscar "fruta"
+(busqueda-almacen bodega 'fruta)    
+R: '((3 1))   ; pasillo3 → primer elemento "fruta"
+
+;; 4. Buscar "cerveza" (no existe)
+(busqueda-almacen bodega 'cerveza)  
+R: '()        ; No hay "cerveza" en la bodega
+
+;; 5. Buscar "leche"
+(busqueda-almacen bodega 'leche)
+R: '((1 1))   ; pasillo1 → primer elemento "leche"
+
+;; 6. Buscar "manzana"
+(busqueda-almacen bodega 'manzana)
+R: '((2 2 1)) ; pasillo2 → estanteB → primer elemento "manzana"
+
+;; 7. Buscar un elemento que aparece varias veces
 (busqueda-almacen bodega 'pan)
+R: '((1 2) (2 1 1) (2 2 2))
+
+;; 8. Buscar productos en diferentes niveles
+(busqueda-almacen bodega 'leche)
+R: '((1 1))
+
+;; 9. Buscar productos en subestantes
 (busqueda-almacen bodega 'queso)
-(busqueda-almacen bodega 'fruta)
-(busqueda-almacen bodega 'cerveza)
+R: '((2 1 2))
+
+;; 10. Buscar algo que no existe
+(busqueda-almacen bodega 'aceite)
+R: '()

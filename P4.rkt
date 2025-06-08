@@ -1,4 +1,14 @@
-#lang racket
+#lang scheme
+
+;; -------------------------------------------- busqueda-almacen --------------------------------------------
+
+;; Función auxiliar para contar elementos de una lista recursivamente
+;; lista: La lista cuyos elementos queremos contar
+;; acum: Acumulador para el conteo (inicialmente 0)
+(define (contar-elementos lista acum)
+  (if (null? lista)
+      acum
+      (contar-elementos (cdr lista) (+ acum 1))))
 
 ;; Busca todas las rutas hacia un producto en un árbol que representa un almacén
 ;;
@@ -9,75 +19,64 @@
   (let ((rutas (buscar-rutas (cdr arbol) producto)))
     ;; Ordenamos las rutas primero por longitud y luego lexicográficamente
     (sort rutas (lambda (ruta1 ruta2)
-                  (let ((len1 (length ruta1))
-                        (len2 (length ruta2)))
+                  (let ((len1 (contar-elementos ruta1 0))
+                        (len2 (contar-elementos ruta2 0)))
                     (if (= len1 len2)
                         ;; Si tienen la misma longitud, comparamos elemento por elemento
-                        (lex-compare ruta1 ruta2)
+                        (ruta-menor ruta1 ruta2)
                         ;; Si tienen longitudes diferentes, ordenamos por longitud
                         (< len1 len2)))))))
 
-;; Comparación lexicográfica de listas de números
-;; Devuelve #t si lista1 es lexicográficamente menor que lista2
-(define (lex-compare lista1 lista2)
+;; Determina si una ruta tiene prioridad sobre otra en el ordenamiento
+;; Devuelve #t si ruta1 debe aparecer antes que ruta2
+(define (ruta-menor? ruta1 ruta2)
   (cond
-    ;; Si la primera lista está vacía, es menor
-    ((null? lista1) #t)
-    ;; Si la segunda lista está vacía, la primera no es menor
-    ((null? lista2) #f)
-    ;; Comparamos los primeros elementos
-    ((< (car lista1) (car lista2)) #t)
-    ((> (car lista1) (car lista2)) #f)
-    ;; Si son iguales, seguimos con el resto
-    (else (lex-compare (cdr lista1) (cdr lista2)))))
+    ;; Si la primera ruta está vacía, tiene prioridad
+    ((null? ruta1) #t)
+    ;; Si la segunda ruta está vacía, la primera no tiene prioridad
+    ((null? ruta2) #f)
+    ;; Comparamos los primeros índices de cada ruta
+    ((< (car ruta1) (car ruta2)) #t)
+    ((> (car ruta1) (car ruta2)) #f)
+    (else (ruta-menor? (cdr ruta1) (cdr ruta2)))))
 
 ;; Función auxiliar para buscar todas las rutas hacia un producto
 ;;
 ;; lista : Lista en la que buscar el producto
 ;; producto : Producto que estamos buscando
 (define (buscar-rutas lista producto)
-  ;; Función interna que realiza la búsqueda recursiva
-  (define (buscar-en-nivel elementos indice acumulador)
-    (if (null? elementos)
-        acumulador  ;; Si no hay más elementos, devolvemos lo acumulado
-        (let ((elemento-actual (car elementos))
-              (resto-elementos (cdr elementos)))
-          (cond
-            ;; Si el elemento actual es una lista (una sala o estante)
-            ((list? elemento-actual)
-             ;; Verificamos si comienza con un símbolo (nombre de sección)
-             (let ((resultados-internos
-                    (if (and (not (null? elemento-actual)) (symbol? (car elemento-actual)))
-                        ;; Si tiene nombre de sección, buscamos en su contenido
-                        (map (lambda (ruta) (cons indice ruta))
-                             (buscar-rutas (cdr elemento-actual) producto))
-                        ;; Si no tiene nombre, buscamos directamente
-                        (map (lambda (ruta) (cons indice ruta))
-                             (buscar-rutas elemento-actual producto)))))
-               ;; Combinamos resultados y continuamos con el siguiente elemento
-               (buscar-en-nivel resto-elementos (+ indice 1) 
-                               (append resultados-internos acumulador))))
-            
-            ;; Si el elemento actual es el producto que buscamos
-            ((eq? elemento-actual producto)
-             ;; Añadimos esta ruta a los resultados y continuamos
-             (buscar-en-nivel resto-elementos (+ indice 1) 
-                             (cons (list indice) acumulador)))
-            
-            ;; En cualquier otro caso, continuamos con el siguiente elemento
-            (else (buscar-en-nivel resto-elementos (+ indice 1) acumulador))))))
-  
-  ;; Iniciamos la búsqueda en el primer nivel (índice 1) con acumulador vacío
-  (buscar-en-nivel lista 1 '()))
+  (letrec ((pasillo (lambda (productos indice acumulador);;función local usando letrec
+              (if (null? productos)
+                  acumulador  ;; Si no hay más productos, devolvemos lo acumulado
+                  (let ((producto-actual (car productos))
+                        (resto-productos (cdr productos)))
+                    (cond
+                      ;; Si el elemento actual es una lista (una sala o estante)
+                      ((list? producto-actual)
+                       ;; Verificamos si comienza con un símbolo (nombre de sección)
+                       (let ((parte-resultado
+                              (if (and (not (null? producto-actual)) (symbol? (car producto-actual)))
+                                  ;; Si tiene nombre de sección, buscamos en su contenido
+                                  (map (lambda (ruta) (cons indice ruta))
+                                       (buscar-rutas (cdr producto-actual) producto))
+                                  ;; Si no tiene nombre, buscamos directamente
+                                  (map (lambda (ruta) (cons indice ruta))
+                                       (buscar-rutas producto-actual producto)))))
+                         ;; Combinamos resultados y continuamos con el siguiente elemento
+                         (pasillo resto-productos (+ indice 1) 
+                                 (append parte-resultado acumulador))))
+                      
+                      ;; Si el elemento actual es el producto que buscamos
+                      ((eq? producto-actual producto)
+                       (pasillo resto-productos (+ indice 1)
+                               (cons (list indice) acumulador)))        
+                      (else (pasillo resto-productos (+ indice 1) acumulador)))))))))
+    
+    (pasillo lista 1 ''));; Llamamos a la función local pasillo con los valores iniciales
 
-;; Ejemplo de uso:
-#|
+;; Definición de la estructura de la bodega para los ejemplos
 (define bodega
   '(bodega
     (pasillo1 leche pan)
     (pasillo2 (estanteA pan queso) (estanteB manzana pan))
     (pasillo3 fruta)))
-
-(busqueda-almacen bodega 'pan)
-;; Resultado: '((1 2) (2 1 1) (2 2 2))
-|#

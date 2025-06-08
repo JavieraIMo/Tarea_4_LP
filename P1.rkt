@@ -1,23 +1,16 @@
-#lang racket
+#lang scheme
 
-;; Esta función determina si el número ingresado coincide con la cantidad de elementos en una lista dada.
+;; -------------------------------------------- coincide? ------------------------------------------
+
+;; Esta función recibe un número entero no negativo n y una lista ls. La función debe devolver #t si n coincide con la cantidad real de elementos de ls y #f en caso contrario
 ;;
 ;; n : Corresponde a un número entero no negativo que representa la cantidad de elementos esperados.
-;; ls : Una lista de cualquier tipo de elementos
-(define (coincide? n ls)
-  (if (< n 0);; Validamos que n sea un número no negativo
-      (error "Ojito: El número n tiene que ser positivo.")
-      (verificar-coincidencia n ls)));; Llamamos a la función aux para verificar la coincidencia o no.
-
-;; Función auxilia que verifica si un número coincide con el tamaño de una lista.
-;;
-;; n : contador de elementos restantes que deben coincidir.
-;; lista-restante : La parte restante de la lista que falta por examinar.
-(define (verificar-coincidencia n lista-restante)
-  ;; Si la lista está vacía
-  (if (null? lista-restante)
-      (= n 0);; n = 0 para que sea #t
-      
-      (if (= n 0) ;; caso contrario #f
-          #f
-          (verificar-coincidencia (- n 1) (cdr lista-restante))))) ;; recursividad para procesar cada elemento que siga
+;; lista : Una lista de cualquier tipo de elementos
+(define (coincide? n lista)
+  (let ((resultado 
+         (cond 
+           ((< n 0) (error "Ojito: n debe ser positivo."))
+           ((null? lista) (= n 0))
+           ((= n 0) #f);; si la lista aún tiene elementos entonces #f
+           (else (coincide? (- n 1) (cdr lista))))))
+    (if resultado #t #f)))

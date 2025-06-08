@@ -39,7 +39,27 @@ El proyecto está organizado en varios archivos, cada uno enfocado en un problem
 ## 🚀 Ejecución
 
 ### Usando DrRacket
-1. Abra DrRacket
-2. Cargue cualquiera de los archivos `.rkt`
-3. Presione el botón "Run" para evaluar todas las definiciones
-4. Utilice la ventana de interacción para probar las funciones implementadas
+1. Abre DrRacket
+2. Desde la barra superior de opciones abre cualquiera de los archivos `.rkt`
+3. Presionar "Run" para evaluar todas las definiciones
+4. Se puede usar la ventana de interacción para probar las funciones implementadas
+
+## 📦 Uso de la Función `busqueda-almacen` (P4)
+
+### Estructura de la Bodega
+La función trabaja con una estructura de árbol N-ario que representa un almacén, donde:
+- El primer elemento es el nombre del almacén
+- Cada lista anidada representa un pasillo o un estante
+- Los símbolos son nombres de productos
+
+### Definición de la Bodega
+Al final del archivo P4.rkt (línea -) se encuentra la definición de una bodega de ejemplo:
+
+```scheme
+(define bodega
+  '(bodega
+    (pasillo1 leche pan)
+    (pasillo2 (estanteA pan queso) (estanteB manzana pan))
+    (pasillo3 fruta)))
+```
+Para probar diferente ejecuciones, se puede modificar

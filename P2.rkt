@@ -1,49 +1,40 @@
-#lang racket
+#lang scheme
 
 ;; -------------------------------------------- mezclador-gourmet-simple ------------------------------------------
 
 ;; Aplica una función a cada elemento de la lista, procesando de adentro hacia afuera
 ;;
-;; f : Función de dos argumentos que se aplicará a cada elemento
-;; e-esperado : cantidad de elementos esperada
+;; f : función de 2 argumentos ((lambda (acum elem) ...).
+;; inicio : valor inicial del “plato” en construcción.
 ;; ls : Lista de elementos a procesar
-(define (mezclador-gourmet-simple f e-esperado ls)
+(define (mezclador-gourmet-simple f inicio ls)
   (let ((listavacia (null? ls))) ;; verificamos si está vacía la lista
     (if listavacia
-        e-esperado
+        inicio
         
         (let* ((primer-elemento (car ls)) ;; si no está vacía
                (resto-lista (cdr ls))
-               (resultado (mezclador-gourmet-simple f e-esperado resto-lista)))
+               (resultado (mezclador-gourmet-simple f inicio resto-lista)))
           
           (let ((resultado-final (f primer-elemento resultado)))
             resultado-final)))))
 
 ;; -------------------------------------------- mezclador-gourmet-cola ------------------------------------------
 
-;; Procesa la lista aplicando una función de izquierda a derecha
-;;
-;; f : Función de dos argumentos que se aplicará a cada elemento
-;; e-esperado : cantidad de elementos esperada
-;; lista-restante : Lista de elementos pendientes por procesar
-(define (procesar-lista-cola f e-esperado lista-restante)
-  
-  (let ((quedan-elementos (not (null? lista-restante)))) ;; Verificamos si quedan elementos por procesar
-    
-    (if (not quedan-elementos);; si no hay, termina
-        e-esperado
-        
-        (let ((elemento-actual (car lista-restante))) ;; si hay, continua tomando el car de lo que queda por procesar.
-          
-          (let* ((contador (f e-esperado elemento-actual))
-                 (nuevo-restante (cdr lista-restante)))
-            
-            (procesar-lista-cola f contador nuevo-restante))))))
-
 ;; Aplica una función a cada elemento de la lista, procesando de izquierda a derecha
 ;;
-;; f : Función de dos argumentos que se aplicará a cada elemento
-;; e-esperado : cantidad de elementos esperada
+;; f : Función de dos argumentos que se aplicará a cada elemento ((lambda (acum elem) ...))
+;; inicio : Valor inicial del "plato" en construcción
 ;; ls : Lista de elementos a procesar
-(define (mezclador-gourmet-cola f e-esperado ls)
-  (procesar-lista-cola f e-esperado ls))
+(define (mezclador-gourmet-cola f inicio ls)
+  (let ((quedan-elementos (not (null? ls)))) ;; Verificamos si quedan elementos
+    
+    (if (not quedan-elementos) ;; Si no hay, termina
+        inicio
+        
+        (let ((elemento-actual (car ls))) ;; Si hay, continúa tomando el car de lo que queda
+          
+          (let* ((resultado (f inicio elemento-actual))
+                 (resto-lista (cdr ls)))
+            
+            (mezclador-gourmet-cola f resultado resto-lista))))))
