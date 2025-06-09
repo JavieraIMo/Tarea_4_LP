@@ -42,8 +42,14 @@ R: #t
 
 ------------------------------------------------  Ejemplos P2  ------------------------------------------------
 
+(mezclador-gourmet-simple + 10 '())
+R: 10  ;; Devuelve el valor inicial
+
+(mezclador-gourmet-simple (lambda (ing pila) (cons ing pila)) '(inicio) '(medio fin))
+R: (medio fin inicio)
+
 (mezclador-gourmet-simple + 0 '(1 2 3 4))                                                      
-R: 24
+R: 10
 
 (mezclador-gourmet-simple * 1 '(2 3 4))                                                        
 R: 24
@@ -55,13 +61,19 @@ R: 35000
 R: '(pan lechuga tomate queso)
 
 (mezclador-gourmet-simple string-append "" '("a" "b" "c"))
-R: "cba"
+R: "abc"
 
 (mezclador-gourmet-simple (lambda (ac x) (/ ac x)) 24 '(2 3))
-R: 4
+R: 16
+
+(mezclador-gourmet-cola + 5 '())
+R: 5  ;; Devuelve el valor inicial
+
+(mezclador-gourmet-cola (lambda (pila ing) (cons ing pila)) '(inicio) '(medio fin))
+R: (fin medio inicio)  
 
 (mezclador-gourmet-cola + 0 '(1 2 3 4))                                                        
-R: 24
+R: 10
 
 (mezclador-gourmet-cola * 1 '(2 3 4))                                                          
 R: 24
@@ -110,6 +122,12 @@ R: '(5 8 8 10)
 (secuencia-rotacional (list (lambda (ac x) (min ac x))) 5 '(3 8 2 10))
 R: '(3 3 2 2)
 
+(secuencia-rotacional (list (lambda (ac x) (+ ac x))) 0 '())
+R: '()  ;; No hay elementos para acumular resultados
+
+(secuencia-rotacional (list (lambda (ac x) (append ac (list x)))) '() '())
+R: '()  ;; No hay elementos para acumular resultados
+
 ------------------------------------------------  Ejemplos P4  ------------------------------------------------
 
 (define bodega
@@ -128,6 +146,8 @@ R: '(3 3 2 2)
     (pasillo3 fruta)
     (pasillo4 aceite vinagre)))
 
+;; los resultados son de este ejemplo 
+
 (define bodega
   '(bodega
     (pasillo1 leche pan)
@@ -135,7 +155,7 @@ R: '(3 3 2 2)
     (pasillo3 fruta)))
 
 ;; 1. Buscar "pan"
-(busqueda-almacen bodega 'pan)      
+(busqueda-almacen bodega 'pan)     
 R: '((1 2)    ; pasillo1 → segundo elemento "pan"
     (2 1 1)   ; pasillo2 → estanteA → primer elemento "pan"
     (2 2 2))  ; pasillo2 → estanteB → segundo elemento "pan"
@@ -160,18 +180,6 @@ R: '((1 1))   ; pasillo1 → primer elemento "leche"
 (busqueda-almacen bodega 'manzana)
 R: '((2 2 1)) ; pasillo2 → estanteB → primer elemento "manzana"
 
-;; 7. Buscar un elemento que aparece varias veces
-(busqueda-almacen bodega 'pan)
-R: '((1 2) (2 1 1) (2 2 2))
-
-;; 8. Buscar productos en diferentes niveles
-(busqueda-almacen bodega 'leche)
-R: '((1 1))
-
-;; 9. Buscar productos en subestantes
-(busqueda-almacen bodega 'queso)
-R: '((2 1 2))
-
-;; 10. Buscar algo que no existe
+;; 7. Buscar algo que no existe
 (busqueda-almacen bodega 'aceite)
 R: '()

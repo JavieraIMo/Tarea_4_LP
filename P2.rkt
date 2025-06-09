@@ -2,7 +2,7 @@
 
 ;; -------------------------------------------- mezclador-gourmet-simple ------------------------------------------
 
-;; Aplica una función a cada elemento de la lista, procesando de adentro hacia afuera
+;; Aplica una función a cada elemento de la lista, procesando con recursión simple
 ;;
 ;; f : función de 2 argumentos ((lambda (acum elem) ...).
 ;; inicio : valor inicial del “plato” en construcción.
@@ -21,7 +21,7 @@
 
 ;; -------------------------------------------- mezclador-gourmet-cola ------------------------------------------
 
-;; Aplica una función a cada elemento de la lista, procesando de izquierda a derecha
+;; Aplica una función a cada elemento de la lista, procesando en cola (de izquierda a derecha o fifo)
 ;;
 ;; f : Función de dos argumentos que se aplicará a cada elemento ((lambda (acum elem) ...))
 ;; inicio : Valor inicial del "plato" en construcción

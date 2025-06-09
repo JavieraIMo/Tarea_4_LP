@@ -2,51 +2,69 @@
 
 ;; -------------------------------------------- busqueda-almacen --------------------------------------------
 
-;; Busca todas las rutas hacia un producto en un árbol que representa un almacén
+;; Determina si una ruta tiene prioridad sobre otra en el ordenamiento, si no quedan ordenadas al revés
 ;;
-;; arbol : Estructura de datos que representa el almacén como un árbol N-ario
-;; producto : Símbolo que representa el producto a buscar
-(define (busqueda-almacen arbol producto)
-  (letrec ((ruta-menor? (lambda (ruta1 ruta2);; letrec para la función local
-                         (cond
-                           ((null? ruta1) #t);; Si la primera ruta está vacía, tiene prioridad
-                           ((null? ruta2) #f);; Si la segunda ruta está vacía, la primera no tiene prioridad
-                           ((< (car ruta1) (car ruta2)) #t);; Comparamos los car
-                           ((> (car ruta1) (car ruta2)) #f)
-                           (else (ruta-menor? (cdr ruta1) (cdr ruta2)))))))
-    (let ((rutas (buscar-rutas (cdr arbol) producto)));; ordenamos las rutas ya que si no se muestran al revéz
-      (sort rutas ruta-menor?))))
+;; ruta1 : Primera ruta a comparar
+;; ruta2 : Segunda ruta a comparar
+(define (ruta-menor? ruta1 ruta2)
+  (cond
+    ((null? ruta1) #t) ;; Si la primera ruta está vacía, tiene prioridad
+    ((null? ruta2) #f) ;; Si la segunda ruta está vacía, la primera no tiene prioridad
+    ((< (car ruta1) (car ruta2)) #t) ;; Comparamos los primeros índices
+    ((> (car ruta1) (car ruta2)) #f)
+    (else (ruta-menor? (cdr ruta1) (cdr ruta2)))))
 
-;; Función auxiliar para buscar todas las rutas hacia un producto
+;; Recorre un pasillo o sección del almacén buscando un producto específico
+;;
+;; productos : Lista de productos a examinar
+;; indice : Índice actual de la posición en el pasillo
+;; acumulador : Lista de rutas encontradas hasta el momento
+;; producto : Producto que se está buscando
+(define (pasillo productos indice acumulador producto)
+  (if (null? productos)
+      acumulador  ;; Si no hay más productos, devolvemos lo acumulado
+      (let ((producto-actual (car productos))
+            (resto-productos (cdr productos)))
+        (let ((nuevo-acumulador
+               (cond
+                 ((list? producto-actual);; Si es una lista (pasillo o estante)
+                  (let ((rutas-encontradas
+                         (if (and (not (null? producto-actual)) 
+                                  (symbol? (car producto-actual)))
+                             
+                             (map (lambda (ruta) (cons indice ruta));; Si tiene nombre de sección, buscamos en su contenido
+                                  (buscar-rutas (cdr producto-actual) producto))
+                             
+                             (map (lambda (ruta) (cons indice ruta));; Si no tiene nombre, buscamos directamente
+                                  (buscar-rutas producto-actual producto)))))
+                    (append rutas-encontradas acumulador)))
+                 
+                 ((eq? producto-actual producto);; Si es el producto buscado
+                  (cons (list indice) acumulador))
+                 
+                 (else acumulador))));; En otro caso, no cambia el acumulador
+            (pasillo resto-productos (+ indice 1) nuevo-acumulador producto)))));; Continuamos con el resto de productos
+
+;; Busca todas las rutas hacia un producto en una lista o estructura anidada
 ;;
 ;; lista : Lista en la que buscar el producto
 ;; producto : Producto que estamos buscando
 (define (buscar-rutas lista producto)
-  (letrec ((pasillo (lambda (productos indice acumulador);; letrec para la función local
-              (if (null? productos)
-                  acumulador  ;; Si no hay más productos, devolvemos lo acumulado
-                  (let ((producto-actual (car productos))
-                        (resto-productos (cdr productos)))
-                    (cond
-                      ((list? producto-actual);; Si el elemento actual es una lista (una sala o estante)
-                       ;; Verificamos si comienza con un símbolo (nombre de sección)
-                       (let ((parte-resultado
-                              (if (and (not (null? producto-actual)) (symbol? (car producto-actual)))
-                                  ;; Si tiene nombre de sección, buscamos en su contenido
-                                  (map (lambda (ruta) (cons indice ruta))
-                                       (buscar-rutas (cdr producto-actual) producto))
-                                  ;; Si no tiene nombre, buscamos directamente
-                                  (map (lambda (ruta) (cons indice ruta))
-                                       (buscar-rutas producto-actual producto)))))
-                         ;; Combinamos resultados y continuamos con el siguiente elemento
-                         (pasillo resto-productos (+ indice 1) 
-                                 (append parte-resultado acumulador))))
-                      
-                      ((eq? producto-actual producto);; Si el elemento actual es el producto que buscamos
-                       (pasillo resto-productos (+ indice 1)
-                               (cons (list indice) acumulador)))        
-                      (else (pasillo resto-productos (+ indice 1) acumulador)))))))))
-    (pasillo lista 1 ''))
+  (pasillo lista 1 '() producto))
+
+;; Busca todas las rutas hacia un producto en un árbol N-ario que representa un almacén
+;;
+;; arbol : Estructura de datos que representa el almacén como un árbol N-ario
+;; producto : Símbolo que representa el producto a buscar
+(define (busqueda-almacen arbol producto)
+  (let ((rutas (buscar-rutas (cdr arbol) producto)))
+    (quote-it (sort rutas ruta-menor?))))
+
+;; Convierte un resultado en una expresión citada (con comilla)
+;;
+;; resultado : Valor o lista a convertir en una expresión citada
+(define (quote-it resultado)
+  (list 'quote resultado))
 
 ;; Definición de la estructura de la bodega para los ejemplos
 (define bodega
