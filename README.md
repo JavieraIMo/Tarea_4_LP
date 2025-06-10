@@ -98,3 +98,7 @@ El archivo `Ejemplos.txt` contiene 10 ejemplos detallados para cada una de las f
 - 7 ejemplos para `busqueda-almacen` (P4)
 
 Estos ejemplos ilustran diferentes casos de uso y comportamientos de las funciones, mostrando tanto los valores de entrada como los resultados esperados.
+
+## 📚 Referencias
+
+Para la realización de esta tarea se revisó la presentación de la Unidad 6 y la documentación oficial de Scheme disponible en [https://docs.scheme.org/](https://docs.scheme.org/), lo que permitió guiar el diseño y la implementación de las funciones requeridas.
